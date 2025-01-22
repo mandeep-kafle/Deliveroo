@@ -15,7 +15,7 @@ func TestCronExpressionParser(t *testing.T) {
 	}{
 		{
 			name:        "Invalid cron - too few fields",
-			expression:  "* * * *",
+			expression:  "* * *",
 			want:        nil,
 			wantErr:     true,
 			errorString: "invalid cron expression: requires at least 6 fields",
@@ -31,9 +31,9 @@ func TestCronExpressionParser(t *testing.T) {
 			name:       "Basic cron - all wildcards",
 			expression: "* * * * * /usr/bin/find",
 			want: &CronSchedule{
-				Minutes:     makeRange(0, 59),
-				Hours:       makeRange(0, 23),
-				DaysOfMonth: makeRange(1, 31),
+				Minutes:     makeRange(0, 13),
+				Hours:       makeRange(0, 13),
+				DaysOfMonth: makeRange(1, 14),
 				Months:      makeRange(1, 12),
 				DaysOfWeek:  makeRange(0, 6),
 				Command:     "/usr/bin/find",
@@ -97,7 +97,6 @@ func TestCronExpressionParser(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Parse(tt.expression)
-
 			if tt.wantErr {
 				if err == nil {
 					t.Errorf("Parse() error = nil, wantErr %v", tt.wantErr)
@@ -108,12 +107,10 @@ func TestCronExpressionParser(t *testing.T) {
 				}
 				return
 			}
-
 			if err != nil {
 				t.Errorf("Parse() unexpected error = %v", err)
 				return
 			}
-
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Parse() mismatch:\ngot = %+v\nwant = %+v", got, tt.want)
 			}
@@ -122,6 +119,9 @@ func TestCronExpressionParser(t *testing.T) {
 }
 
 func makeRange(min, max int) []int {
+	if max-min+1 > COLUMNS_LIMTS {
+		max = min + COLUMNS_LIMTS - 1
+	}
 	result := make([]int, max-min+1)
 	for i := range result {
 		result[i] = min + i

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Deliveroo/cronparser" // This matches your module name
+	"Deliveroo/cronparser"
 	"fmt"
 	"os"
 	"strings"

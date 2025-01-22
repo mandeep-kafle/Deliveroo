@@ -11,7 +11,12 @@ type CronExpressionParser struct {
 	fieldParsers    map[string]ExpressionParser
 }
 
-
+func formatResults(values []int) []int {
+	if len(values) <= COLUMNS_LIMTS {
+		return values
+	}
+	return values[:COLUMNS_LIMTS]
+}
 func (p *CronExpressionParser) parseTimeField(field string, timeField TimeField) ([]int, error) {
 	field = strings.TrimSpace(field)
 	if field == "" {
@@ -78,7 +83,7 @@ func Parse(expression string) (*CronSchedule, error) {
 		if err != nil {
 			return nil, fmt.Errorf("error in field %d (%s): %w", i+1, fields[i], err)
 		}
-		*scheduleFields[i] = values
+		*scheduleFields[i] = formatResults(values)
 	}
 
 	return schedule, nil

@@ -1,5 +1,7 @@
 package cronparser
 
+const COLUMNS_LIMTS int = 14
+
 // base
 type TimeConstraints struct {
 	fieldBoundaries map[TimeField][2]int
