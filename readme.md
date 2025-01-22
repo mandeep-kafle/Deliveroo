@@ -31,7 +31,7 @@ A command-line application written in Go that parses cron expressions and displa
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/cron-parser.git
+git clone 
 cd Deliveroo
 ```
 2. Run with your input
